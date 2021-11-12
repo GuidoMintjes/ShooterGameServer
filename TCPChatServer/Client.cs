@@ -218,6 +218,7 @@ namespace GameServer {
                 endPoint = _endPoint;
 
                 Funcs.printMessage(3, "UDP client connected!", false);
+                Console.WriteLine("A udp client has pinged me!");
                 //ServerSend.UDPTest(clientID);
             }
 
