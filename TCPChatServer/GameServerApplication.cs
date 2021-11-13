@@ -4,7 +4,7 @@ using GameServer;
 using System.Threading;
 
 namespace GameServer {
-    class ChatApp {
+    class GameServerApplication {
 
         private static bool isRunning = false;
 
@@ -45,7 +45,7 @@ namespace GameServer {
             Thread mainThread = new Thread(new ThreadStart(MainThread));
             mainThread.Start();
 
-            ChatServer.StartServer(maxConnectionsStart, portStart);
+            GameServer.StartServer(maxConnectionsStart, portStart);
         }
 
 

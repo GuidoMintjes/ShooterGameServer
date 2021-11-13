@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace GameServer {
 
-    class ChatServer {
+    class GameServer {
 
 
         public static int MaxConnections;
@@ -107,11 +107,11 @@ namespace GameServer {
 
                 using (Packet packet = new Packet(dataReceived)) {
 
-                    int clientID = packet.PacketReadInt(true);
+                    int clientID = packet.ReadInt(true);
 
                     // If clientID received == 0 something went wrong so return!
                     if (clientID == 0) {
-                        Console.WriteLine("Dit mag niet gebeuren! (ChatServer.cs)");
+                        Console.WriteLine("Dit mag niet gebeuren! (GameServer.cs)");
                         return;
                     }
 

@@ -98,7 +98,7 @@ namespace GameServer {
 
                     if (dataLength <= 0) {
 
-                        //ChatServer.connections[id].Disconnect();    // Properly disconnects from the server
+                        GameServer.connections[id].Disconnect();    // Properly disconnects from the server
 
                         return;             // Return out of the method when no bytes have been read ==>
                                             // (amount of bytes read = 0)
@@ -118,7 +118,7 @@ namespace GameServer {
                 } catch (Exception exc) {
 
                     Console.WriteLine("Disconnected due to error: " + exc.Message);
-                    //ChatServer.connections[id].Disconnect();    // Properly disconnects from the server
+                    GameServer.connections[id].Disconnect();    // Properly disconnects from the server
                 }
             }
 
@@ -135,7 +135,7 @@ namespace GameServer {
                 // the length of that packet
                 if (receivedPacket.GetUnreadPacketSize() >= 4) {
 
-                    packetLength = receivedPacket.PacketReadInt(true);
+                    packetLength = receivedPacket.ReadInt(true);
 
                     // Check if packet size is 0 or less, if so, return true so that the packet will be reset
                     if (packetLength <= 0) {
@@ -148,16 +148,16 @@ namespace GameServer {
                 // While this is true there is still data that needs to be handled
                 while (packetLength > 0 && packetLength <= receivedPacket.GetUnreadPacketSize()) {
 
-                    byte[] packetBytes = receivedPacket.PacketReadBytes(packetLength, true);
+                    byte[] packetBytes = receivedPacket.ReadBytes(packetLength, true);
 
                     ThreadManager.ExecuteOnMainThread(() => {
 
                         using (Packet packet = new Packet(packetBytes)) {
 
-                            int packetID = packet.PacketReadInt(true);
+                            int packetID = packet.ReadInt(true);
 
                             
-                            ChatServer.packetHandlers[packetID](id, packet);
+                            GameServer.packetHandlers[packetID](id, packet);
 
 
                             //Funcs.printMessage(2, "Added to packet handlers", true);
@@ -168,7 +168,7 @@ namespace GameServer {
 
                     if (receivedPacket.GetUnreadPacketSize() >= 4) {
 
-                        packetLength = receivedPacket.PacketReadInt(true);
+                        packetLength = receivedPacket.ReadInt(true);
 
                         // Check if packet size is 0 or less, if so, return true so that the packet will be reset
                         if (packetLength <= 0) {
@@ -224,21 +224,21 @@ namespace GameServer {
 
             public void SendData(Packet packet) {
 
-                ChatServer.SendUDPData(endPoint, packet);
+                GameServer.SendUDPData(endPoint, packet);
             }
 
 
             public void HandleData(Packet packet) {
 
-                int packetLength = packet.PacketReadInt(true);
+                int packetLength = packet.ReadInt(true);
                 byte[] packetData = packet.GetPacketBytes();
 
                 ThreadManager.ExecuteOnMainThread(() => {
 
                     using (Packet packet = new Packet(packetData)) {
 
-                        int packetID = packet.PacketReadInt(true);
-                        ChatServer.packetHandlers[packetID](clientID, packet);
+                        int packetID = packet.ReadInt(true);
+                        GameServer.packetHandlers[packetID](clientID, packet);
                     }
                 });
             }
@@ -249,7 +249,7 @@ namespace GameServer {
 
             player = new Player(clientID, userName, new Vector3(0f, 0f, 0f));
 
-            foreach (Client _client in ChatServer.connections.Values) {
+            foreach (Client _client in GameServer.connections.Values) {
 
                 if(_client.player != null) {
 
@@ -260,7 +260,7 @@ namespace GameServer {
                 }
             }
 
-            foreach (Client _client in ChatServer.connections.Values) {
+            foreach (Client _client in GameServer.connections.Values) {
 
                 if(_client.player != null) {
 

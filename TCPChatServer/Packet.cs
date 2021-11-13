@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace GameServer {
@@ -44,7 +45,7 @@ namespace GameServer {
             buffer = new List<byte>();    // New and empty packet gets created
             readPointer = 0;            // Set the pointer to 0 in order to start reading at the start of the packet
 
-            PacketWrite(id);
+            Write(id);
         }
 
 
@@ -66,7 +67,7 @@ namespace GameServer {
         // Fill packet with received data, after which it can be read
         public void SetPacketBytes(byte[] dataSet) {
 
-            PacketWrite(dataSet);
+            Write(dataSet);
             byteArray = buffer.ToArray();   // Set the received bytes to this byteArray, which can then be read
         }
 
@@ -120,7 +121,7 @@ namespace GameServer {
 
 
         // Add a bytearray to the datastream
-        void PacketWrite(byte[] _dataSet) {
+        void Write(byte[] _dataSet) {
             buffer.AddRange(_dataSet);
         }
 
@@ -129,11 +130,11 @@ namespace GameServer {
         /// Add an integer to the packet/bytestream, mainly used for adding the packet id that is used in sending
         /// </summary>
         /// <param name="_intValue"> The actual integer value that is added to the packet (4 bytes) </param>
-        public void PacketWrite(int _intValue) {
+        public void Write(int _intValue) {
 
-            ChatApp.countIntSend++;
+            GameServerApplication.countIntSend++;
 
-            //Console.WriteLine(_intValue.ToString() + " sent as no. " + ChatApp.countIntSend + 
+            //Console.WriteLine(_intValue.ToString() + " sent as no. " + GameServerApplication.countIntSend + 
                 //" from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
 
             buffer.AddRange(BitConverter.GetBytes(_intValue));
@@ -141,14 +142,36 @@ namespace GameServer {
 
 
         // Add a string to the packet/datastream
-        public void PacketWrite(string _stringValue) {
+        public void Write(string _stringValue) {
 
             int a = Encoding.Unicode.GetByteCount(_stringValue);   // A string isn't always the same size, which is why the length of the string
                                                                    // has to be added to the datastream, so the other end knows how long to read
                                                                    // keep reading for just the string, an integer is always 4 bytes
-            PacketWrite(a);
+            Write(a);
             
             buffer.AddRange(Encoding.Unicode.GetBytes(_stringValue)); // Add to the packet/datastream the string itself
+        }
+
+        public void Write(float _value) {
+
+            buffer.AddRange(BitConverter.GetBytes(_value));
+        }
+
+
+        public void Write(Vector3 value) {
+
+            Write(value.X);
+            Write(value.Y);
+            Write(value.Z);
+        }
+
+
+        public void Write(Quaternion value) {
+
+            Write(value.X);
+            Write(value.Y);
+            Write(value.Z);
+            Write(value.W);
         }
 
         #endregion
@@ -157,7 +180,7 @@ namespace GameServer {
 
 
         // Reads a single byte of the datastream
-        public byte PacketReadByte(bool moveDataPointer) {
+        public byte ReadByte(bool moveDataPointer) {
 
             if(buffer.Count > readPointer) {
 
@@ -175,7 +198,7 @@ namespace GameServer {
 
 
         // Reads a byte array with specified size in the datastream
-        public byte[] PacketReadBytes(int byteArraySize, bool moveDataPointer) {
+        public byte[] ReadBytes(int byteArraySize, bool moveDataPointer) {
 
             if(buffer.Count > readPointer) {
 
@@ -193,7 +216,7 @@ namespace GameServer {
 
 
         // Reads an int in the datastream
-        public int PacketReadInt(bool moveDataPointer) {
+        public int ReadInt(bool moveDataPointer) {
 
             if (buffer.Count > readPointer) {
 
@@ -214,11 +237,11 @@ namespace GameServer {
 
 
         // Reads a string in the datastream
-        public string PacketReadString(bool moveDataPointer) {
+        public string ReadString(bool moveDataPointer) {
 
             if (buffer.Count > readPointer) {
 
-                int stringSize = PacketReadInt(true);
+                int stringSize = ReadInt(true);
 
                 string stringRead = Encoding.Unicode.GetString(byteArray, readPointer, stringSize);
                 if (moveDataPointer)
@@ -232,6 +255,39 @@ namespace GameServer {
             }
         }
 
+
+        public float ReadFloat(bool _moveReadPos = true) {
+            
+            if (buffer.Count > readPointer) {
+
+                // If there are unread bytes
+                float _value = BitConverter.ToSingle(byteArray, readPointer); // Convert the bytes to a float
+
+                if (_moveReadPos) {
+
+                    // If _moveReadPos is true
+                    readPointer += 4; // Increase readPos by 4
+                }
+
+                return _value; // Return the float
+            
+            } else {
+
+                throw new Exception("Could not read value of type 'float'!");
+            }
+        }
+
+
+        public Vector3 ReadVector3() {
+
+            return new Vector3();
+        }
+
+
+        public Quaternion ReadQuaternion() {
+
+            return new Quaternion();
+        }
 
         #endregion
 

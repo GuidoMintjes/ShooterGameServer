@@ -8,14 +8,14 @@ namespace GameServer {
 
         public static void ReturnedWelcomeReceived(int clientID, Packet packet) {
 
-            int receivedClientID = packet.PacketReadInt(true);
-            string receivedUserName = packet.PacketReadString(true);
+            int receivedClientID = packet.ReadInt(true);
+            string receivedUserName = packet.ReadString(true);
 
-            Funcs.printMessage(3, $"{ChatServer.connections[clientID].tcp.socket.Client.RemoteEndPoint} connected to this server!"
+            Funcs.printMessage(3, $"{GameServer.connections[clientID].tcp.socket.Client.RemoteEndPoint} connected to this server!"
                 + $" (ID {clientID} with name {receivedUserName})", true);
 
 
-            ChatServer.connections[clientID].userName = receivedUserName;   // Saves the username for this client
+            GameServer.connections[clientID].userName = receivedUserName;   // Saves the username for this client
 
 
 
@@ -25,14 +25,10 @@ namespace GameServer {
                 Funcs.printMessage(0, $"Client {receivedUserName} with ID {clientID} has the wrong ID: {receivedClientID}!", false);
                 Console.WriteLine();
 
-                //ChatServer.connections[clientID].Disconnect();
+                GameServer.connections[clientID].Disconnect();
             }
-        }
 
-
-        public static void UDPTestConfirmed(int clientID, Packet packet) {
-
-            Funcs.printMessage(2, $"Received udp confirmation: {packet.PacketReadString(true)}", false);
+            GameServer.connections[clientID].SendIntoGame(receivedUserName);
         }
     }
 }

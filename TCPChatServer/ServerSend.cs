@@ -11,8 +11,8 @@ namespace GameServer {
 
 			Packet packet = new Packet((int) ServerPackets.welcome);     // Create a welcoming packet with the welcome enum
 
-			packet.PacketWrite(welcomeMessage);                         // Add the welcome message to the packet
-			packet.PacketWrite(toClientID);                               // Add the client ID to the packet
+			packet.Write(welcomeMessage);                         // Add the welcome message to the packet
+			packet.Write(toClientID);                               // Add the client ID to the packet
 
 			Console.WriteLine();
 			Console.WriteLine("Sending clientID: " + toClientID);
@@ -27,7 +27,7 @@ namespace GameServer {
 
 			packet.PacketWriteLength();
 
-			ChatServer.connections[clientID].tcp.SendData(packet);
+			GameServer.connections[clientID].tcp.SendData(packet);
 		}
 
 
@@ -35,7 +35,7 @@ namespace GameServer {
 
 			packet.PacketWriteLength();
 
-			ChatServer.connections[clientID].udp.SendData(packet);
+			GameServer.connections[clientID].udp.SendData(packet);
 		}
 
 
@@ -43,9 +43,9 @@ namespace GameServer {
 		public static void TCPSendPacketToAll(Packet packet) {
 
 			packet.PacketWriteLength();
-			for (int i = 1; i < ChatServer.MaxConnections; i++) {
+			for (int i = 1; i < GameServer.MaxConnections; i++) {
 
-				ChatServer.connections[i].tcp.SendData(packet);
+				GameServer.connections[i].tcp.SendData(packet);
 
 			}
 		}
@@ -55,10 +55,10 @@ namespace GameServer {
 		public static void TCPSendPacketToAll(int excludedClient, Packet packet) {
 
 			packet.PacketWriteLength();
-			for (int i = 1; i < ChatServer.MaxConnections; i++) {
+			for (int i = 1; i < GameServer.MaxConnections; i++) {
 
 				if(i != excludedClient)
-					ChatServer.connections[i].tcp.SendData(packet);
+					GameServer.connections[i].tcp.SendData(packet);
 			}
 		}
 
@@ -67,10 +67,10 @@ namespace GameServer {
 		public static void UDPSendPacketToAll(Packet packet) {
 
 			packet.PacketWriteLength();
-			for (int i = 1; i < ChatServer.MaxConnections; i++) {
+			for (int i = 1; i < GameServer.MaxConnections; i++) {
 
 				Funcs.printMessage(2, $"Sending udp to client {i}", false);
-				ChatServer.connections[i].udp.SendData(packet);
+				GameServer.connections[i].udp.SendData(packet);
 
 			}
 		}
@@ -80,16 +80,24 @@ namespace GameServer {
 		public static void UDPSendPacketToAll(int excludedClient, Packet packet) {
 
 			packet.PacketWriteLength();
-			for (int i = 1; i < ChatServer.MaxConnections; i++) {
+			for (int i = 1; i < GameServer.MaxConnections; i++) {
 
 				if (i != excludedClient)
-					ChatServer.connections[i].udp.SendData(packet);
+					GameServer.connections[i].udp.SendData(packet);
 			}
 		}
 
         public static void SpawnPlayer(int clientID, Player player) {
 
-			//TODO
+			using (Packet packet = new Packet((int) ServerPackets.spawnPlayer)) {
+
+				packet.Write(player.id);
+				packet.Write(player.userName);
+				packet.Write(player.position);
+				packet.Write(player.rotation);
+
+				TCPSendPacket(clientID, packet);
+            }
         }
     }
 }
