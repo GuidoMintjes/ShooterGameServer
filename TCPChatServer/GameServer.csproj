@@ -14,6 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="ServerLog.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SERVER_INFO.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

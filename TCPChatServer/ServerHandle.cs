@@ -11,7 +11,9 @@ namespace GameServer {
             int receivedClientID = packet.ReadInt(true);
             string receivedUserName = packet.ReadString(true);
 
-            Funcs.printMessage(3, $"{GameServer.connections[clientID].tcp.socket.Client.RemoteEndPoint} connected to this server!"
+            //Funcs.PrintMessage(1, receivedUserName);
+
+            Funcs.PrintMessage(3, $"{GameServer.connections[clientID].tcp.socket.Client.RemoteEndPoint} connected to this server!"
                 + $" (ID {clientID} with name {receivedUserName})", true);
 
 
@@ -21,14 +23,25 @@ namespace GameServer {
 
             if(clientID != receivedClientID) {
 
-                Console.WriteLine();
-                Funcs.printMessage(0, $"Client {receivedUserName} with ID {clientID} has the wrong ID: {receivedClientID}!", false);
-                Console.WriteLine();
+                Funcs.PrintMessage(2, "");
+                Funcs.PrintMessage(0, $"Client {receivedUserName} with ID {clientID} has the wrong ID: {receivedClientID}!", false);
+                Funcs.PrintMessage(2, "");
 
                 GameServer.connections[clientID].Disconnect();
             }
 
             GameServer.connections[clientID].SendIntoGame(receivedUserName);
+        }
+
+
+        public static void HandlePlayerMoved(int clientID, Packet packet) {
+
+            using(Packet _packet = new Packet((int) ServerPackets.PlayerPosition)) {
+
+                _packet.Write(packet.ReadVector3(true));
+
+                ServerSend.UDPSendPacketToAll(clientID, _packet);
+            }
         }
     }
 }

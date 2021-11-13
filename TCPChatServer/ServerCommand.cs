@@ -17,10 +17,10 @@ namespace GameServer {
                     ConsoleKeyInfo key = Console.ReadKey(true);
                     switch (key.Key) {
                         case ConsoleKey.Enter:
-                            Console.WriteLine();
-                            Funcs.printMessage(3, "Input command:", false);
+                            Funcs.PrintMessage(2, "");
+                            Funcs.PrintMessage(3, "Input command:", false);
                             commandRaw = Console.ReadLine();
-                            Console.WriteLine();
+                            Funcs.PrintMessage(2, "");
 
                             SendCommand(commandRaw);
                             break;
@@ -44,14 +44,14 @@ namespace GameServer {
                     command = commandsRaw[0];
                     argument = commandsRaw[1];
                 } catch {
-                    Funcs.printMessage(1, "Command not formatted right!", false);
+                    Funcs.PrintMessage(1, "Command not formatted right!", false);
                 }
 
                 switch (command) {
                     
                     default:
 
-                        Funcs.printMessage(1, "Command not formatted right!", false);
+                        Funcs.PrintMessage(1, "Command not formatted right!", false);
                         CommandLoop();
                         break;
                 }

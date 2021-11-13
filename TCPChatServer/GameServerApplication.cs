@@ -12,6 +12,8 @@ namespace GameServer {
 
         static void Main(string[] args) {
 
+            Funcs.Initialize();
+
             Console.Write(@"                            Welcome to the server program!
                             
                             Press enter to use commands!
@@ -20,7 +22,7 @@ namespace GameServer {
 
                             " + "\n");
 
-            Console.Title = "TCP Chat Server Demo";
+            Console.Title = "Multiplayer Shooter Game Server";
             int maxConnectionsStart = 10, portStart = 0;
 
             string INFO = File.ReadAllText(@"SERVER_INFO.txt");
@@ -33,7 +35,7 @@ namespace GameServer {
                 portStart = Convert.ToInt32(INFOS[1]);
             } catch {
 
-                Funcs.printMessage(0, "File (SERVER_INFO.txt) contents broken!", false);
+                Funcs.PrintMessage(0, "File (SERVER_INFO.txt) contents broken!", false);
                 Console.ReadLine();
                 Environment.Exit(0);
             }
@@ -52,7 +54,7 @@ namespace GameServer {
         // Run the logic loop
         private static void MainThread() {
 
-            Funcs.printMessage(1, $"Main thread with loop started at {Consts.TICKMSDURATION} ms per tick!", false);
+            Funcs.PrintMessage(1, $"Main thread with loop started at {Consts.TICKMSDURATION} ms per tick!", false);
             DateTime nextCycle = DateTime.Now;
 
             while(isRunning) {

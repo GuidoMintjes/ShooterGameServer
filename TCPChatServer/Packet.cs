@@ -109,7 +109,7 @@ namespace GameServer {
         // Write the length of the packet into the packet, this is need for properly receiving it
         public void PacketWriteLength() {
 
-            //Console.WriteLine("Inserted packet length to first position.");
+            //Funcs.PrintMessage("Inserted packet length to first position.");
 
             buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
         }
@@ -134,7 +134,7 @@ namespace GameServer {
 
             GameServerApplication.countIntSend++;
 
-            //Console.WriteLine(_intValue.ToString() + " sent as no. " + GameServerApplication.countIntSend + 
+            //Funcs.PrintMessage(_intValue.ToString() + " sent as no. " + GameServerApplication.countIntSend + 
                 //" from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
 
             buffer.AddRange(BitConverter.GetBytes(_intValue));
@@ -191,7 +191,7 @@ namespace GameServer {
                 return byteRead;
 
             } else {
-                Funcs.printMessage(0, "Value of type 'byte' could not be read!", false);
+                Funcs.PrintMessage(0, "Value of type 'byte' could not be read!", false);
                 return nullByte;
             }
         }
@@ -209,7 +209,7 @@ namespace GameServer {
                 return bytesRead;
 
             } else {
-                Funcs.printMessage(0, "Value of type 'byte[]' could not be read!", false);
+                Funcs.PrintMessage(0, "Value of type 'byte[]' could not be read!", false);
                 return null;
             }
         }
@@ -222,7 +222,7 @@ namespace GameServer {
 
                 int intRead = BitConverter.ToInt32(byteArray, readPointer);
 
-                //Console.WriteLine(intRead.ToString() + " from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
+                //Funcs.PrintMessage(intRead.ToString() + " from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
 
                 if (moveDataPointer)
                     readPointer += 4;   // Increase pointer by 4 because an int is 32 bits = 4 bytes
@@ -230,7 +230,7 @@ namespace GameServer {
                 return intRead;
 
             } else {
-                Funcs.printMessage(0, "Value of type 'int' could not be read!", false);
+                Funcs.PrintMessage(0, "Value of type 'int' could not be read!", false);
                 return 0;
             }
         }
@@ -250,14 +250,14 @@ namespace GameServer {
                 return stringRead;
 
             } else {
-                Funcs.printMessage(0, "Value of type 'string' could not be read!", false);
+                Funcs.PrintMessage(0, "Value of type 'string' could not be read!", false);
                 return null;
             }
         }
 
 
         public float ReadFloat(bool _moveReadPos = true) {
-            
+
             if (buffer.Count > readPointer) {
 
                 // If there are unread bytes
@@ -270,7 +270,7 @@ namespace GameServer {
                 }
 
                 return _value; // Return the float
-            
+
             } else {
 
                 throw new Exception("Could not read value of type 'float'!");
@@ -278,15 +278,15 @@ namespace GameServer {
         }
 
 
-        public Vector3 ReadVector3() {
+        public Vector3 ReadVector3(bool _moveReadPos) {
 
-            return new Vector3();
+            return new Vector3(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
         }
 
 
-        public Quaternion ReadQuaternion() {
+        public Quaternion ReadQuaternion(bool _moveReadPos) {
 
-            return new Quaternion();
+            return new Quaternion(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
         }
 
         #endregion

@@ -31,7 +31,7 @@ namespace GameServer {
         // Initialize the server
         public static void StartServer(int maxConnections, int port) {
 
-            Funcs.printMessage(2, "Starting server...", true);
+            Funcs.PrintMessage(2, "Starting server...", true);
             InitializeServerData(maxConnections);
 
             MaxConnections = maxConnections;
@@ -49,7 +49,7 @@ namespace GameServer {
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
 
-            Funcs.printMessage(2, "Server initialized on port: " + Port, true);
+            Funcs.PrintMessage(2, "Server initialized on port: " + Port, true);
 
             ServerCommand.CommandLoop();
         }
@@ -58,7 +58,7 @@ namespace GameServer {
         // Handle connection once it has been established
         private static void TCPConnectCallback(IAsyncResult aResult) {
 
-            Console.WriteLine("Connection incoming!");
+            Funcs.PrintMessage(3, "Connection incoming!");
 
             // Store the tcp client instance in a local variable here
             TcpClient client = tcpListener.EndAcceptTcpClient(aResult);
@@ -66,7 +66,7 @@ namespace GameServer {
                                                                                                 // again, otherwise the tcplistener would stop
                                                                                                 // listening and no other connections could be made
 
-            Funcs.printMessage(2, "Someone is trying to connect from: " + client.Client.RemoteEndPoint, true);
+            Funcs.PrintMessage(2, "Someone is trying to connect from: " + client.Client.RemoteEndPoint, true);
 
             
             for (int i = 1; i <= MaxConnections; i++) {
@@ -80,7 +80,7 @@ namespace GameServer {
             }
 
 
-            Funcs.printMessage(2, client.Client.RemoteEndPoint + " has failed to connect to server because the server is full. " +
+            Funcs.PrintMessage(2, client.Client.RemoteEndPoint + " has failed to connect to server because the server is full. " +
                                 " (SERVER FULL ERROR)", true);
         }
 
@@ -100,7 +100,7 @@ namespace GameServer {
 
                 if(dataReceived.Length < 4) {
 
-                    Console.WriteLine("Data from client is not big enough!!");
+                    Funcs.PrintMessage(0, "Data from client is not big enough!!");
                     return;
                 }
 
@@ -111,7 +111,7 @@ namespace GameServer {
 
                     // If clientID received == 0 something went wrong so return!
                     if (clientID == 0) {
-                        Console.WriteLine("Dit mag niet gebeuren! (GameServer.cs)");
+                        Funcs.PrintMessage(0, "Dit mag niet gebeuren! (GameServer.cs)");
                         return;
                     }
 
@@ -132,7 +132,7 @@ namespace GameServer {
 
             } catch (Exception ex) {
 
-                Console.WriteLine($"Error receiving through UDP: {ex}");
+                Funcs.PrintMessage(0, $"Error receiving through UDP: {ex}");
             }
         }
 
@@ -145,13 +145,13 @@ namespace GameServer {
 
                     //Funcs.PrintData(packet.GetPacketBytes());
 
-                    //Console.WriteLine("Sending through udp...");
+                    //Funcs.PrintMessage("Sending through udp...");
 
                     udpListener.BeginSend(packet.GetPacketBytes(), packet.GetPacketSize(), clientEndPoint, null, null);
                 }
             } catch (Exception ex) {
 
-                Console.WriteLine($"Error sending through UDP: {ex}");
+                Funcs.PrintMessage(0, $"Error sending through UDP: {ex}");
             }
         }
 
@@ -168,11 +168,12 @@ namespace GameServer {
             // Initialize the dictionary of packet handlers
             packetHandlers = new Dictionary<int, PacketHandler>() {
 
-                { (int)ClientPackets.welcomeReceived, ServerHandle.ReturnedWelcomeReceived }
+                { (int) ClientPackets.welcomeReceived, ServerHandle.ReturnedWelcomeReceived },
+                { (int) ClientPackets.playerMovement, ServerHandle.HandlePlayerMoved }
             };
 
 
-            Funcs.printMessage(2, "Packet handler dictionary initiated!", true);
+            Funcs.PrintMessage(2, "Packet handler dictionary initiated!", true);
         }
     }
 }

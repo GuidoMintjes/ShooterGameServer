@@ -22,7 +22,7 @@ namespace GameServer {
 
             if (action == null) {
 
-                Funcs.printMessage(1, "Action could not be put on main thread because it's empty!", true);
+                Funcs.PrintMessage(1, "Action could not be put on main thread because it's empty!", true);
                 return;
             }
 

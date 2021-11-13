@@ -51,7 +51,7 @@ namespace GameServer {
 
             public void Connect(TcpClient _socket) {
 
-                //Console.WriteLine("Trying to connect to server...");
+                //Funcs.PrintMessage("Trying to connect to server...");
 
                 socket = _socket;
 
@@ -82,7 +82,7 @@ namespace GameServer {
 
                 } catch (Exception exc) {
 
-                    Funcs.printMessage(0, $"Unable to send data to client {id} through TCP, err msg: {exc}", false);
+                    Funcs.PrintMessage(0, $"Unable to send data to client {id} through TCP, err msg: {exc}", false);
                 }
             }
 
@@ -98,7 +98,7 @@ namespace GameServer {
 
                     if (dataLength <= 0) {
 
-                        GameServer.connections[id].Disconnect();    // Properly disconnects from the server
+                        //GameServer.connections[id].Disconnect();    // Properly disconnects from the server
 
                         return;             // Return out of the method when no bytes have been read ==>
                                             // (amount of bytes read = 0)
@@ -117,8 +117,8 @@ namespace GameServer {
 
                 } catch (Exception exc) {
 
-                    Console.WriteLine("Disconnected due to error: " + exc.Message);
-                    GameServer.connections[id].Disconnect();    // Properly disconnects from the server
+                    Funcs.PrintMessage(3, "Disconnected due to error: " + exc.Message);
+                    //GameServer.connections[id].Disconnect();    // Properly disconnects from the server
                 }
             }
 
@@ -217,8 +217,8 @@ namespace GameServer {
 
                 endPoint = _endPoint;
 
-                Funcs.printMessage(3, "UDP client connected!", false);
-                Console.WriteLine("A udp client has pinged me!");
+                //Funcs.PrintMessage(3, "UDP client connected!", false);
+                Funcs.PrintMessage(3, "A udp client has pinged me!");
                 //ServerSend.UDPTest(clientID);
             }
 
@@ -247,7 +247,7 @@ namespace GameServer {
 
         public void SendIntoGame(string _clientName) {
 
-            player = new Player(clientID, userName, new Vector3(0f, 0f, 0f));
+            player = new Player(clientID, _clientName, new Vector3(0f, 0f, 0f));
 
             foreach (Client _client in GameServer.connections.Values) {
 
@@ -272,10 +272,10 @@ namespace GameServer {
 
         public void Disconnect() {
 
-            Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected from the server!");
+            Funcs.PrintMessage(3, $"{tcp.socket.Client.RemoteEndPoint} has disconnected from the server!");
 
             userName = null;
-            tcp.Disconnect();
+            //tcp.Disconnect();
         }
     }
 }

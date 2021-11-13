@@ -14,9 +14,9 @@ namespace GameServer {
 			packet.Write(welcomeMessage);                         // Add the welcome message to the packet
 			packet.Write(toClientID);                               // Add the client ID to the packet
 
-			Console.WriteLine();
-			Console.WriteLine("Sending clientID: " + toClientID);
-			Console.WriteLine();
+			Funcs.PrintMessage(2, "");
+			Funcs.PrintMessage(2, "Sending clientID: " + toClientID);
+			Funcs.PrintMessage(2, "");
 
 			TCPSendPacket(toClientID, packet);
 		}
@@ -69,7 +69,7 @@ namespace GameServer {
 			packet.PacketWriteLength();
 			for (int i = 1; i < GameServer.MaxConnections; i++) {
 
-				Funcs.printMessage(2, $"Sending udp to client {i}", false);
+				Funcs.PrintMessage(2, $"Sending udp to client {i}", false);
 				GameServer.connections[i].udp.SendData(packet);
 
 			}
@@ -89,12 +89,19 @@ namespace GameServer {
 
         public static void SpawnPlayer(int clientID, Player player) {
 
+			Funcs.PrintMessage(2, "Spawning in a player...");
+			
 			using (Packet packet = new Packet((int) ServerPackets.spawnPlayer)) {
 
 				packet.Write(player.id);
-				packet.Write(player.userName);
+				if (!string.IsNullOrEmpty(player.userName))
+					packet.Write(player.userName);
+				else
+					packet.Write("USERNAME COULD NOT BE RECEIVED THROUGH THE NETWORK");
 				packet.Write(player.position);
 				packet.Write(player.rotation);
+
+				Funcs.PrintData(packet.GetPacketBytes(), true);
 
 				TCPSendPacket(clientID, packet);
             }
