@@ -8,16 +8,16 @@ namespace GameServer {
     // Packet sent from server to client, in this case only a welcome message
     public enum ServerPackets {
         welcome = 1,
-        spawnPlayer = 2,
-        PlayerPosition = 3,
-        PlayerRotation = 4
+        spawnPlayer,
+        PlayerPosition,
+        PlayerRotation
     }
 
 
     // Packet sent from client to server, in this case confirming the welcome message
     public enum ClientPackets {
         welcomeReceived = 1,
-        playerMovement = 2
+        playerMovement
     }
 
 
@@ -31,6 +31,7 @@ namespace GameServer {
         private byte[] byteArray;
         private int readPointer;
         
+        public int ReadPointer { get { return readPointer; } }
 
         public Packet() {
 
@@ -158,11 +159,22 @@ namespace GameServer {
         }
 
 
-        public void Write(Vector3 value) {
+        public void Write(Vector3 value, bool doStuff = false) {
 
             Write(value.X);
             Write(value.Y);
             Write(value.Z);
+
+            if (doStuff && 1 == 0) {
+                Funcs.PrintMessage(4, $"Sending packet with vector3 data: ");
+                Funcs.PrintData(GetPacketBytes());
+
+                Funcs.PrintData(BitConverter.GetBytes(value.X));
+                Funcs.PrintData(BitConverter.GetBytes(value.Y));
+                Funcs.PrintData(BitConverter.GetBytes(value.Z));
+
+                Funcs.PrintMessage(2, "");
+            }
         }
 
 
@@ -216,16 +228,20 @@ namespace GameServer {
 
 
         // Reads an int in the datastream
-        public int ReadInt(bool moveDataPointer) {
+        public int ReadInt(bool moveDataPointer, bool showReadPointers = false) {
 
             if (buffer.Count > readPointer) {
 
                 int intRead = BitConverter.ToInt32(byteArray, readPointer);
 
-                //Funcs.PrintMessage(intRead.ToString() + " from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
+                if(showReadPointers)
+                    Funcs.PrintMessage(4, "Read Pointer before reading integer is: " + readPointer);
 
                 if (moveDataPointer)
                     readPointer += 4;   // Increase pointer by 4 because an int is 32 bits = 4 bytes
+
+                if(showReadPointers)
+                    Funcs.PrintMessage(4, "Read Pointer after reading integer is: " + readPointer);
 
                 return intRead;
 

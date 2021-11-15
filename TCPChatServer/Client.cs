@@ -206,7 +206,6 @@ namespace GameServer {
 
             public int clientID;
 
-
             public UDP(int _clientID) {
 
                 clientID = _clientID;
@@ -230,14 +229,22 @@ namespace GameServer {
 
             public void HandleData(Packet packet) {
 
-                int packetLength = packet.ReadInt(true);
+                
                 byte[] packetData = packet.GetPacketBytes();
 
                 ThreadManager.ExecuteOnMainThread(() => {
 
                     using (Packet packet = new Packet(packetData)) {
 
+                        int clientReceivedID = packet.ReadInt(true);
+
+                        //Funcs.PrintMessage(4, clientReceivedID.ToString());
+
+                        int packetLength = packet.ReadInt(true);
+
                         int packetID = packet.ReadInt(true);
+                        //Funcs.PrintMessage(4, "Packet ID recognized: " + packetID.ToString());
+
                         GameServer.packetHandlers[packetID](clientID, packet);
                     }
                 });

@@ -188,8 +188,10 @@ namespace GameServer {
 
         private static void OutputLog(string message) {
 
-            File.AppendAllText(Environment.CurrentDirectory + Path.DirectorySeparatorChar + "ServerLog.txt", 
-                                    message + Environment.NewLine);
+            try {
+                File.AppendAllText(Environment.CurrentDirectory + Path.DirectorySeparatorChar + "ServerLog.txt",
+                                   message + Environment.NewLine);
+            } catch { }
 
             /*
             logOutputter = new StreamWriter("ServerLog.txt");

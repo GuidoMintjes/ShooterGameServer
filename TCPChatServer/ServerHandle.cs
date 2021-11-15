@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace GameServer {
@@ -38,7 +39,24 @@ namespace GameServer {
 
             using(Packet _packet = new Packet((int) ServerPackets.PlayerPosition)) {
 
-                _packet.Write(packet.ReadVector3(true));
+                packet.ReadInt(true);
+
+                Vector3 sendPosition = packet.ReadVector3(true);
+
+                /*
+                Funcs.PrintMessage(4, "");
+                Funcs.PrintMessage(4, sendPosition.ToString());
+                Funcs.PrintMessage(4, "");
+                */
+
+                _packet.Write(clientID);
+                _packet.Write(sendPosition, true);
+
+                /*
+                Funcs.PrintMessage(4, "");
+                Funcs.PrintData(_packet.GetPacketBytes(), true);
+                Funcs.PrintMessage(4, "");
+                */
 
                 ServerSend.UDPSendPacketToAll(clientID, _packet);
             }

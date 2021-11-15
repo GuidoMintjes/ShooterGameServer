@@ -80,6 +80,10 @@ namespace GameServer {
 		public static void UDPSendPacketToAll(int excludedClient, Packet packet) {
 
 			packet.PacketWriteLength();
+
+			//Funcs.PrintMessage(4, "I am trying to send the vector3 position: ");
+			//Funcs.PrintData(packet.GetPacketBytes());
+
 			for (int i = 1; i < GameServer.MaxConnections; i++) {
 
 				if (i != excludedClient)
@@ -98,10 +102,10 @@ namespace GameServer {
 					packet.Write(player.userName);
 				else
 					packet.Write("USERNAME COULD NOT BE RECEIVED THROUGH THE NETWORK");
-				packet.Write(player.position);
+				packet.Write(player.position, false);
 				packet.Write(player.rotation);
 
-				Funcs.PrintData(packet.GetPacketBytes(), true);
+				//Funcs.PrintData(packet.GetPacketBytes(), true);
 
 				TCPSendPacket(clientID, packet);
             }

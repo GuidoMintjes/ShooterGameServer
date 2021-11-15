@@ -94,6 +94,11 @@ namespace GameServer {
                 IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
                 byte[] dataReceived = udpListener.EndReceive(Aresult, ref clientEndPoint);
 
+                /*
+                Funcs.PrintMessage(4, "");
+                Funcs.PrintData(dataReceived);
+                Funcs.PrintMessage(4, "");
+                */
 
                 udpListener.BeginReceive(UDPReceiveCallback, null);
 
@@ -108,6 +113,8 @@ namespace GameServer {
                 using (Packet packet = new Packet(dataReceived)) {
 
                     int clientID = packet.ReadInt(true);
+
+                    //Funcs.PrintData(dataReceived, false);
 
                     // If clientID received == 0 something went wrong so return!
                     if (clientID == 0) {
