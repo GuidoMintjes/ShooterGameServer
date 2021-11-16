@@ -77,7 +77,7 @@ namespace GameServer {
                 _packet.Write(sendPosition);
 
                 Funcs.PrintMessage(3, "");
-                Funcs.PrintData(_packet.GetPacketBytes());
+                Funcs.PrintData(_packet.GetPacketBytes(), true);
                 Funcs.PrintMessage(3, "");
 
                 ServerSend.UDPSendPacketToAll(clientID, _packet);
