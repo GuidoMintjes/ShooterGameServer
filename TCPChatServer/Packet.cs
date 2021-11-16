@@ -17,7 +17,8 @@ namespace GameServer {
     // Packet sent from client to server, in this case confirming the welcome message
     public enum ClientPackets {
         welcomeReceived = 1,
-        playerMovement
+        playerMovement,
+        playerRotation
     }
 
 

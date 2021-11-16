@@ -63,5 +63,25 @@ namespace GameServer {
                 ServerSend.UDPSendPacketToAll(clientID, _packet);
             }
         }
+
+
+        public static void HandlePlayerRotated(int clientID, Packet packet) {
+
+            using (Packet _packet = new Packet((int) ServerPackets.PlayerRotation)) {
+
+                packet.ReadInt(true);
+
+                Quaternion sendPosition = packet.ReadQuaternion(true);
+
+                _packet.Write(clientID);
+                _packet.Write(sendPosition);
+
+                Funcs.PrintMessage(3, "");
+                Funcs.PrintData(_packet.GetPacketBytes());
+                Funcs.PrintMessage(3, "");
+
+                ServerSend.UDPSendPacketToAll(clientID, _packet);
+            }
+        }
     }
 }

@@ -176,7 +176,8 @@ namespace GameServer {
             packetHandlers = new Dictionary<int, PacketHandler>() {
 
                 { (int) ClientPackets.welcomeReceived, ServerHandle.ReturnedWelcomeReceived },
-                { (int) ClientPackets.playerMovement, ServerHandle.HandlePlayerMoved }
+                { (int) ClientPackets.playerMovement, ServerHandle.HandlePlayerMoved },
+                { (int) ClientPackets.playerRotation, ServerHandle.HandlePlayerRotated }
             };
 
 
