@@ -37,6 +37,8 @@ namespace GameServer {
 
         public static void HandlePlayerMoved(int clientID, Packet packet) {
 
+            //Funcs.PrintMessage(4, "Received player position packet!");
+
             using(Packet _packet = new Packet((int) ServerPackets.PlayerPosition)) {
 
                 packet.ReadInt(true);
