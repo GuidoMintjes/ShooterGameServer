@@ -98,7 +98,7 @@ namespace GameServer {
 
                     if (dataLength <= 0) {
 
-                        //GameServer.connections[id].Disconnect();    // Properly disconnects from the server
+                        GameServer.connections[id].Disconnect();    // Properly disconnects from the server
 
                         return;             // Return out of the method when no bytes have been read ==>
                                             // (amount of bytes read = 0)
@@ -118,7 +118,7 @@ namespace GameServer {
                 } catch (Exception exc) {
 
                     Funcs.PrintMessage(3, "Disconnected due to error: " + exc.Message);
-                    //GameServer.connections[id].Disconnect();    // Properly disconnects from the server
+                    GameServer.connections[id].Disconnect();    // Properly disconnects from the server
                 }
             }
 
@@ -249,6 +249,12 @@ namespace GameServer {
                     }
                 });
             }
+
+
+            public void Disconnect() {
+
+                endPoint = null;
+            }
         }
 
 
@@ -282,7 +288,9 @@ namespace GameServer {
             Funcs.PrintMessage(3, $"{tcp.socket.Client.RemoteEndPoint} has disconnected from the server!");
 
             userName = null;
-            //tcp.Disconnect();
+            tcp.Disconnect();
+            udp.Disconnect();
+            player = null;
         }
     }
 }

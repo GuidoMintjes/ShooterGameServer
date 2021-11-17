@@ -93,7 +93,7 @@ namespace GameServer {
 
         public static void SpawnPlayer(int clientID, Player player) {
 
-			Funcs.PrintMessage(2, "Spawning in a player...");
+			//Funcs.PrintMessage(2, "Spawning in a player...");
 			
 			using (Packet packet = new Packet((int) ServerPackets.spawnPlayer)) {
 
