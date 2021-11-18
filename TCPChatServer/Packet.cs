@@ -10,7 +10,8 @@ namespace GameServer {
         welcome = 1,
         spawnPlayer,
         PlayerPosition,
-        PlayerRotation
+        PlayerRotation,
+        PlayerDisconnected
     }
 
 
@@ -18,7 +19,8 @@ namespace GameServer {
     public enum ClientPackets {
         welcomeReceived = 1,
         playerMovement,
-        playerRotation
+        playerRotation,
+        playerDisconnected
     }
 
 

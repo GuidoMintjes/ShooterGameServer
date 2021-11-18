@@ -287,6 +287,13 @@ namespace GameServer {
 
             Funcs.PrintMessage(3, $"{tcp.socket.Client.RemoteEndPoint} has disconnected from the server!");
 
+            using (Packet _packet = new Packet( (int) ServerPackets.PlayerDisconnected )) {
+
+                _packet.Write(clientID);
+
+                ServerSend.TCPSendPacketToAll(clientID, _packet);
+            }
+
             userName = null;
             tcp.Disconnect();
             udp.Disconnect();
