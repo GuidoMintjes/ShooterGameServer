@@ -60,8 +60,8 @@ namespace GameServer {
                 Funcs.PrintMessage(4, "");
                 */
 
-                //ServerSend.UDPSendPacketToAll(clientID, _packet);
-                ServerSend.UDPSendPacketToAll(_packet);
+                ServerSend.UDPSendPacketToAll(clientID, _packet);
+                //ServerSend.UDPSendPacketToAll(_packet);
             }
         }
 

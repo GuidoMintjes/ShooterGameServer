@@ -69,9 +69,8 @@ namespace GameServer {
 			packet.PacketWriteLength();
 			for (int i = 1; i < GameServer.MaxConnections; i++) {
 
-				Funcs.PrintMessage(2, $"Sending udp to client {i}", false);
+				//Funcs.PrintMessage(2, $"Sending udp to client {i}", false);
 				GameServer.connections[i].udp.SendData(packet);
-
 			}
 		}
 
