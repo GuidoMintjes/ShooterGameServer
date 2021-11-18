@@ -83,5 +83,23 @@ namespace GameServer {
                 ServerSend.UDPSendPacketToAll(clientID, _packet);
             }
         }
+
+
+        public static void HandlePlayerScaled(int clientID, Packet packet) {
+
+            using (Packet _packet = new Packet((int) ServerPackets.PlayerScaled)) {
+
+                int packetSize = packet.ReadInt(true);
+
+                Vector3 playerScale = packet.ReadVector3(true);
+
+                _packet.Write(clientID);
+                _packet.Write(playerScale);
+
+                //Funcs.PrintMessage(4, "Sending player scaled:", false);
+                
+                ServerSend.TCPSendPacketToAll(_packet);
+            }
+        }
     }
 }

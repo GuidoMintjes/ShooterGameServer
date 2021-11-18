@@ -11,7 +11,8 @@ namespace GameServer {
         spawnPlayer,
         PlayerPosition,
         PlayerRotation,
-        PlayerDisconnected
+        PlayerDisconnected,
+        PlayerScaled
     }
 
 
@@ -20,7 +21,8 @@ namespace GameServer {
         welcomeReceived = 1,
         playerMovement,
         playerRotation,
-        playerDisconnected
+        playerDisconnected,
+        playerScaled
     }
 
 

@@ -177,7 +177,8 @@ namespace GameServer {
 
                 { (int) ClientPackets.welcomeReceived, ServerHandle.ReturnedWelcomeReceived },
                 { (int) ClientPackets.playerMovement, ServerHandle.HandlePlayerMoved },
-                { (int) ClientPackets.playerRotation, ServerHandle.HandlePlayerRotated }
+                { (int) ClientPackets.playerRotation, ServerHandle.HandlePlayerRotated },
+                { (int) ClientPackets.playerScaled, ServerHandle.HandlePlayerScaled }
             };
 
 
